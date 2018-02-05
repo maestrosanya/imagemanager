@@ -8,6 +8,8 @@ class ManagerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migration');
+        
+        $this->loadRoutesFrom(__DIR__ . '/../routes/route.php');
     }
 
     public function register()
