@@ -13,11 +13,11 @@ class CreateFoldersTable extends Migration
      */
     public function up()
     {
-        Schema::create('imgr_folder', function (Blueprint $table) {
+        Schema::create('m_folders', function (Blueprint $table) {
             $table->increments('id');
 
             $table->string('name', 60);
-            $table->integer('parent_folder');
+            $table->integer('parent_folder')->default(0);
 
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ class CreateFoldersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('imgr_folder');
+        Schema::dropIfExists('m_folders');
     }
 }

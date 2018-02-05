@@ -10,4 +10,9 @@ class ManagerServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migration');
     }
 
+    public function register()
+    {
+
+    }
+
 }
