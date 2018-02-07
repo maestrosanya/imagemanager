@@ -10,6 +10,18 @@ class ManagerServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migration');
         
         $this->loadRoutesFrom(__DIR__ . '/../routes/route.php');
+        
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'imagemanager');
+
+
+        $this->publishes([
+            __DIR__.'/../public/css' => public_path('imagemanager/css'),
+        ], 'imagemanager');
+
+        $this->publishes([
+            __DIR__.'/../public/js' => public_path('imagemanager/js'),  
+        ], 'imagemanager');
+
     }
 
     public function register()

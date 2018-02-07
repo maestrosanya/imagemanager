@@ -10,4 +10,9 @@ class FoldersRepository extends Repository
     {
         parent::__construct($model);
     }
+
+    public function getFoldersWhere($str1, $str2)
+    {
+        return $this->model->where('parent_folder', '0')->get();
+    }
 }

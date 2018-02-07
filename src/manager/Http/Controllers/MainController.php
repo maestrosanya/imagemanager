@@ -21,7 +21,11 @@ class MainController extends Controller
 
     public function index()
     {
-        dump($this->folder_rep->getAll());
+        dump($this->folder_rep->getFoldersWhere('parent_folder', '0'));
+
+        $folders = $this->folder_rep->getFoldersWhere('parent_folder', '0');
+
+        return view('imagemanager::index', ['folders' => $folders]);
     }
 
 }
