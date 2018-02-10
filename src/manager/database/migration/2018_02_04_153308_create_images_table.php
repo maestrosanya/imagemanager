@@ -19,6 +19,7 @@ class CreateImagesTable extends Migration
             $table->string('content_type', 255)->nullable()->default('image');
             $table->string('sub_dir', 255)->nullable();
             $table->string('file_name', 255);
+            $table->string('original_name', 255);
             $table->string('description', 255)->nullable();
             $table->string('external_id', 255)->nullable();
 
