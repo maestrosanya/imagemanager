@@ -1,7 +1,7 @@
 @if(isset($errors))
-<div class="imgr__errors">
+<div>
     @foreach($errors->all() as $error)
-        <div>{{ $error }}</div>
+        <div class="imgr__errors">{{ $error }}</div>
     @endforeach
 </div>
 @endif
@@ -29,7 +29,7 @@
                 <div class="row">
                     @if(isset($images) and $images != 'parent')
                         @foreach($images as $image)
-                            <div class="col-3 col-sm-4 col-md-3 col-lg-2">
+                            <div class="col-3 col-sm-4 col-md-3 col-lg-3">
                                 <img src="{{ asset('storage/uploads') .'/'.  $image->file_name}}"  alt="{{ $image->original_name }}" width="100%" height="auto">
                                 <p>
                                     <input type="checkbox" name="images['name'][]" value="{{ $image->file_name }}">
@@ -42,7 +42,6 @@
             </div>
         </div>
 
-        <h1><?php echo isset($images) ? dump($images) : 'Нет'; ?></h1>
 </div>
 
 
@@ -56,7 +55,7 @@
         var parent_folder   = $(this).attr('href');
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: '/admin/image-manager/folder',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

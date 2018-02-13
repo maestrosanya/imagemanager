@@ -10,19 +10,19 @@
                 <button id="imgr_btn_remove"><span><i class="fa fa-trash-o" aria-hidden="true"></i></span> remove</button>
             </div>
 
-            <div class="imgr__header__input">
-                <div class="form-group">
-                    <input type="text" id="new_name_folder" name="new_name_folder">
-                    <button id="imgr_btn_add_folder">Создать</button>
-                </div>
-            </div>
-
             <div class="imgr__header__search">
                 <div class="imgr__header__search__input">
                     <input type="text" id="imgr_search_folder_name" placeholder="Найти папку">
                     <button id="imgr_search_folder_btn">
                         <i class="fa fa-search" aria-hidden="true"></i>
                     </button>
+                </div>
+            </div>
+
+            <div class="imgr__header__input">
+                <div class="form-group">
+                    <input type="text" id="new_name_folder" class="new_name_folder" name="new_name_folder">
+                    <button id="imgr_btn_add_folder">Создать</button>
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
         var parent_folder   = $('#imgr_parent_folder').attr('value');
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: '/admin/image-manager/folder',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -78,14 +78,14 @@
     $('#imgr_btn_show_folder_input').click(function (e) {
         e.preventDefault();
 
-        $('.imgr__header__input').show(500);
+        $('.imgr__header__input').toggle(500);
     });
 
     $('#imgr_btn_add_folder').click(function (e) {
         e.preventDefault();
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: '/admin/image-manager/add-folder',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

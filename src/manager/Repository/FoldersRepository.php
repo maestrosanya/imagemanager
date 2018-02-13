@@ -52,11 +52,19 @@ class FoldersRepository extends Repository
     // Создаёт новую папку
     public function createNewFolder($parent_folder, $name_folder)
     {
+
         $folder = new $this->model;
 
         $folder->name           = $name_folder;
         $folder->parent_folder  = $parent_folder;
 
         $folder->save();
+    }
+
+    public function existsFolderName($parent_folder, $name_folder)
+    {
+        $folder = $this->model->where('parent_folder', $parent_folder)->where('name', $name_folder)->get();
+
+        return $folder;
     }
 }

@@ -11,7 +11,7 @@ function openImageManager(htmlElement) {
         e.preventDefault();
 
         $.ajax({
-            type: 'GET',
+            type: 'POST', 
             url: '/admin/image-manager',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -10,6 +10,7 @@ use ImageManager\Model\Folder;
 use ImageManager\Model\Image;
 use ImageManager\Repository\FoldersRepository;
 use ImageManager\Repository\ImagesRepository;
+use ImageManager\Rules\ValidExistsCurrentFolderName;
 
 class MainController extends Controller
 {
@@ -22,56 +23,44 @@ class MainController extends Controller
         $this->image_rep = new ImagesRepository(new Image());
     }
 
-    public function index(Request $request, $id_folder = 0)
+    public function index(Request $request)
     {
-      //  dump($this->folder_rep->getFoldersWhere('parent_folder', '0'));
-
-       // dump($id_folder);
-
+        $id_folder = 0;
 
         if (isset($id_folder)) {
             $folders = $this->folder_rep->getFoldersWhere('parent_folder', $id_folder);
 
             $request->flashOnly('id_folder');
 
-           // Session::flash('id_folder', $id_folder);
-
-          //  dump(Session::all());
-
-          //  $previousUrl = isset(Session::get('_previous')) : Session::get('_previous') ?
         }
         else {
             $folders = $this->folder_rep->getFoldersWhere('parent_folder', '0');
         }
-
-
-       // return view('imagemanager::index', ['folders' => $folders, 'btn_back' => ''])->render();
-
-       // $dataAjax['manager'] = view('imagemanager::index')->render();
-       // return 'hello';
-
-       // return response()->view('imagemanager::index');
-
-
 
         $content = view('imagemanager::imgr-content', ['folders' => $folders])->render();
 
         $data = [];
         $data = array_add($data, 'btn_back', '');
         $data = array_add($data, 'content', $content);
-        //$data = array_add($data, 'folders', $folders);
-
 
         $manager = view('imagemanager::index')->with($data)->render();
         return response()->json(array('manager'=> $manager), 200);
     }
 
+    /**
+     * Генерирует контент приложения.
+     *
+     *  1) Ожидает POST параметры:
+     *  $request->id_folder - id папки,
+     *  $request->parent_folder - id родительской папки
+     *
+     *  2) $data - массив с переменными для вывода их в шаблон
+     */
     public function content(Request $request, $data = [])
     {
         $parent_level = 0;
         $images = [];
         $currentFolderName = 'parent';
-
 
         if (isset($request->id_folder)) {
             $folders = $this->folder_rep->getFoldersWhere('parent_folder', $request->id_folder);
@@ -83,7 +72,6 @@ class MainController extends Controller
             }
 
             $images = $this->folder_rep->getImagesFromFolder($request->id_folder);
-
         }
         else {
             $folders = $this->folder_rep->getFoldersWhere('parent_folder', '0');
@@ -92,7 +80,6 @@ class MainController extends Controller
         if (isset($request->parent_folder)) {
             $parent_level = $this->folder_rep->getAllParentLevel($request->parent_folder);
         }
-
 
         $data = array_add($data, 'folders', $folders);
         $data = array_add($data, 'back', $parent_level);
@@ -104,40 +91,52 @@ class MainController extends Controller
         return response()->json(array('content'=> $content), 200);
     }
 
+    /**
+     * Ожидает POST параметры:
+     *  $request->id_folder - id папки,
+     *  $request->parent_folder - id родительской папки,
+     *  $request->new_name_folder - имя новой папки
+     */
+    public function addFolder(Request $request)
+    {
+        $data = $this->validAddFolder($request);
+
+        return $this->content($request, $data);
+    }
 
     /**
-     * return html
+     * Проверяет и создаёт папку в таблице m_folder
+     * Возвращает массив с ошибками валидации
+     *
+     * @return array
      */
-    // Ожидает GET/POST параметры: id_folder, parent_folder, new_name_folder - имя новой папки
-    public function addFolder(Request $request)
+    private function validAddFolder(Request $request)  
     {
         $data = [];
 
         if (isset($request->new_name_folder)) {
 
-            /*$validator = $this->validate($request, [
-                'new_name_folder' => 'required|min:1|max:3'
-            ]);*/
-
-            $validator = Validator::make(
-                array('new_name_folder' => $request->new_name_folder),
-                array('new_name_folder' => array('required', 'min:5'))
+            $input = array('new_name_folder' => $request->new_name_folder);
+            $rules = array('new_name_folder' => array('required', 'alpha_dash', 'min:1', 'max:40', new ValidExistsCurrentFolderName($request->parent_folder) ));
+            $messages = array(
+                'required' => 'Поле должно быть заполнено.',
+                'min' => 'Имя папки должно быть не менее 1 символа.',
+                'max' => 'Имя папки не должно превышать 40 символов.',
+                'alpha_dash' => 'Имя папки может содержать только буквы, цифры и тире',
             );
+
+            $validator = Validator::make($input, $rules, $messages);
 
             if ($validator->passes()) {
                 $this->folder_rep->createNewFolder($request->parent_folder, $request->new_name_folder);
             }
             else {
                 $messages = $validator->messages();
-
-                $data = array_add($data, 'errors', $messages);  
+                $data = array_add($data, 'errors', $messages);
             }
-
-
-           // $this->folder_rep->createNewFolder($request->parent_folder, $request->new_name_folder);
         }
 
-        return $this->content($request, $data);
+        return $data;
     }
 
 
