@@ -42,16 +42,24 @@
   }
 }
 
+.imgr__header__input__image {
+  display: none;
+}
+
 .imgr__header__input {
 
-  & button {
+  &__folder button {
     margin-left: -5px;
+  }
+  &__image button {
+    margin-left: -3px;
   }
 }
 .new_name_folder {
   width: 308px;
   padding: 1px 10px 1px 10px;
 }
+
 
 .imgr__errors {
   border: solid 1px tomato;

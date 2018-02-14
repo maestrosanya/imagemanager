@@ -45,8 +45,16 @@
   margin: 0px -4px 0 0;
 }
 
-.imgr__header__input button {
+.imgr__header__input__image {
+  display: none;
+}
+
+.imgr__header__input__folder button {
   margin-left: -5px;
+}
+
+.imgr__header__input__image button {
+  margin-left: -3px;
 }
 
 .new_name_folder {

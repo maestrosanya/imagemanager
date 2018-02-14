@@ -110,7 +110,7 @@ class MainController extends Controller
      *
      * @return array
      */
-    private function validAddFolder(Request $request)  
+    private function validAddFolder(Request $request)
     {
         $data = [];
 
@@ -137,6 +137,37 @@ class MainController extends Controller
         }
 
         return $data;
+    }
+
+    public function addImage(Request $request)
+    {
+
+        $filesArray = [];
+        $res = '';
+
+        for ($key = 0; $key < count($_FILES['uploads_new_images']['tmp_name']); $key++) {
+
+            $filesArray[] = [
+                'name' => $_FILES['uploads_new_images']['name'][$key],
+                'tmp_name' => $_FILES['uploads_new_images']['tmp_name'][$key],
+                'size' => $_FILES['uploads_new_images']['size'][$key],
+                'type' => $_FILES['uploads_new_images']['type'][$key],
+                'error' => $_FILES['uploads_new_images']['error'][$key]
+            ];
+
+        }
+
+        foreach ($filesArray as $file) {
+            if (copy($file['tmp_name'], storage_path() .'/'. $file['name'])) {
+                $res = 'Файл загружен на сервер';
+            }
+            else {
+                $res = 'Ошибка при загрузке файла';
+            }
+        }
+
+
+        return response()->json(array('content' => $filesArray, 'res' => $res), 200);
     }
 
 
