@@ -103,7 +103,21 @@
     margin-bottom: 10px;
     padding: 0 5px 0 5px;
   }
+
+  &.remove {
+    width: 490px;
+    margin-left: -245px;
+
+    & button {
+      float: right;
+      margin-right: 15px;
+    }
+  }
 }
+.imgr_folder_options_window_remove_info {
+  margin: -4px 0px 15px -20px;
+}
+
 /* Options folder end */
 
 .imgr__content__folders,

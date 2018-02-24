@@ -220,7 +220,7 @@ class MainController extends Controller
         }
         else {
             $messages = $validator->messages();
-            $valid = $messages;
+            $valid = $messages; 
         }
 
 

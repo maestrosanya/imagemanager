@@ -116,6 +116,20 @@
   padding: 0 5px 0 5px;
 }
 
+.imgr_folder_options_window_content.remove {
+  width: 490px;
+  margin-left: -245px;
+}
+
+.imgr_folder_options_window_content.remove button {
+  float: right;
+  margin-right: 15px;
+}
+
+.imgr_folder_options_window_remove_info {
+  margin: -4px 0px 15px -20px;
+}
+
 /* Options folder end */
 
 .imgr__content__folders,

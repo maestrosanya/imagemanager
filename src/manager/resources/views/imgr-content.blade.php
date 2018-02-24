@@ -51,7 +51,7 @@
                 </div>
             </div>
 
-            <div class="imgr_folder_options_window">
+            <div class="imgr_folder_options_window rename">
                 <div class="imgr_folder_options_window_content form-group">
                     <label for="imgr_rename_folder">Новое имя</label>
                     <input type="text" id="imgr_rename_folder" name="imgr_rename_folder">
@@ -60,10 +60,21 @@
                 </div>
             </div>
 
+            <div class="imgr_folder_options_window remove">
+                <div class="imgr_folder_options_window_content remove form-group">
+                    <div class="imgr_folder_options_window_remove_info alert alert-danger" role="alert">
+                        Внимание!!!
+                    </div>
+
+                    <button id="imgr_remove_folder_btn_close">Отмена</button>
+                    <button id="imgr_remove_folder_btn">Удалить</button>
+
+                </div>
+            </div>
+
         </div>
 
 </div>
-
 
 <script>
 
@@ -82,7 +93,7 @@
     $('.imgr_folder_btn_options_rename').click(function (e) {
         e.preventDefault();
 
-        $('.imgr_folder_options_window').css('display', 'block');
+        $('.imgr_folder_options_window.rename').css('display', 'block');
 
         var currentFolderElement = $(this).parents('.imgr__content__folders__item').find('.imgr_folder_btn');
 
@@ -122,6 +133,28 @@
             }
         });
 
+    });
+
+    // Всплывающая опция "Удалить папку"
+    $('.imgr_folder_btn_options_remove').click(function (e) {
+        e.preventDefault();
+
+        $('.imgr_folder_options_window.remove').css('display', 'block');
+
+        var currentFolderElement = $(this).parents('.imgr__content__folders__item').find('.imgr_folder_btn');
+
+        var currentFolderName = $(currentFolderElement).text();
+        var currentFolderId = $(currentFolderElement).attr('data-folder_id');
+
+        $('#imgr_rename_folder').val(currentFolderName);
+        $('#imgr_rename_folder').attr('data-imgr_rename_folder_id', currentFolderId);
+
+        $('.imgr_folder_options_window_remove_info').html('<h3>ВНИМАНИЕ!</h3> Вы пытаетесь удалить папку "'+ currentFolderName + '". Находящиеся в папке данные будут удалены безвозвратно!');
+
+    });
+
+    $('#imgr_remove_folder_btn_close').click(function () {
+        $('.imgr_folder_options_window').css('display', 'none');
     });
 
 
