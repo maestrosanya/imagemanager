@@ -148,6 +148,7 @@
                 if(data){
                     console.log(data.content);
                     console.log(data.res);
+                    console.log(data.valid);
                 }
             }
         });

@@ -29,3 +29,4 @@ function openImageManager(htmlElement) {
 }
 openImageManager('.open-image-manager');
 
+

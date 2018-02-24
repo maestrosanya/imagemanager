@@ -67,4 +67,13 @@ class FoldersRepository extends Repository
 
         return $folder;
     }
+
+    public function updateFolder($newName, $folderId)
+    {
+        $folder = Folder::find($folderId);
+
+        $folder->name = $newName;
+
+        $folder->save();
+    }
 }

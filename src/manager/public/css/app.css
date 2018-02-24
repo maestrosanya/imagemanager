@@ -21,6 +21,10 @@
   border-radius: 5px;
 }
 
+.imgr__box button {
+  cursor: pointer;
+}
+
 .imgr__header__search {
   position: absolute;
   top: 9px;
@@ -43,6 +47,86 @@
 
 .imgr__header__btn button {
   margin: 0px -4px 0 0;
+}
+
+.imgr_folder_btn {
+  display: inline-block;
+  cursor: pointer;
+  width: 73%;
+}
+
+.imgr__content__folders__item {
+  position: relative;
+}
+
+.imgr__content__folders__item:hover {
+  color: #ff6347;
+}
+
+/* Options folder start */
+
+.imgr_folder_btn_options {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: -12px;
+}
+
+.imgr_folder_btn_options button {
+  font-size: 13px;
+  padding: 0;
+}
+
+.imgr_folder_btn_options_rename {
+  color: #b48a61;
+  margin-right: -2px;
+}
+
+.imgr_folder_btn_options_remove {
+  color: #88140e;
+}
+
+.imgr_folder_options_window {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.imgr_folder_options_window_content {
+  width: 250px;
+  padding: 4px 0 27px 20px;
+  position: absolute;
+  top: 133px;
+  left: 50%;
+  margin-left: -125px;
+  background-color: #f7f7f7;
+  border-radius: 6px;
+  -webkit-box-shadow: 0px 3px 40px -3px #000000;
+          box-shadow: 0px 3px 40px -3px #000000;
+}
+
+.imgr_folder_options_window_content input {
+  width: 208px;
+  margin-bottom: 10px;
+  padding: 0 5px 0 5px;
+}
+
+/* Options folder end */
+
+.imgr__content__folders,
+.imgr__content__images {
+  height: 74%;
+  overflow: auto;
+}
+
+.imgr__content__images__image {
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .imgr__header__input__image {

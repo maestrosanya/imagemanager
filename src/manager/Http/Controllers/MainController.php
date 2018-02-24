@@ -117,12 +117,12 @@ class MainController extends Controller
         if (isset($request->new_name_folder)) {
 
             $input = array('new_name_folder' => $request->new_name_folder);
-            $rules = array('new_name_folder' => array('required', 'alpha_dash', 'min:1', 'max:40', new ValidExistsCurrentFolderName($request->parent_folder) ));
+            $rules = array('new_name_folder' => array('required', 'alpha_dash', 'min:1', 'max:25', new ValidExistsCurrentFolderName($request->parent_folder) ));
             $messages = array(
                 'required' => 'Поле должно быть заполнено.',
                 'min' => 'Имя папки должно быть не менее 1 символа.',
-                'max' => 'Имя папки не должно превышать 40 символов.',
-                'alpha_dash' => 'Имя папки может содержать только буквы, цифры и тире',
+                'max' => 'Имя папки не должно превышать 25 символов.',
+                'alpha_dash' => 'Имя папки может содержать только алфавитные символы, цифры, знаки подчёркивания (_) и дефисы (-)',
             );
 
             $validator = Validator::make($input, $rules, $messages);
@@ -139,11 +139,63 @@ class MainController extends Controller
         return $data;
     }
 
+    /**
+     * Ожидает POST параметры:
+     *  $request->id_folder - id папки,
+     *  $request->parent_folder - id родительской папки,
+     *  $request->new_name_folder - имя новой папки
+     */
+    public function renameFolder(Request $request)
+    {
+        $data = $this->validRenameFolder($request);
+
+        return $this->content($request, $data);
+    }
+
+    /**
+     * Проверяет и переименовывает папку в таблице m_folder
+     * Возвращает массив с ошибками валидации
+     *
+     * @return array
+     */
+    private function validRenameFolder(Request $request)
+    {
+        $data = [];
+
+        if (isset($request->new_name_folder)) {
+
+            $input = array('new_name_folder' => $request->new_name_folder);
+            $rules = array('new_name_folder' => array('required', 'alpha_dash', 'min:1', 'max:25', new ValidExistsCurrentFolderName($request->parent_folder) ));
+            $messages = array(
+                'required' => 'Поле должно быть заполнено.',
+                'min' => 'Имя папки должно быть не менее 1 символа.',
+                'max' => 'Имя папки не должно превышать 25 символов.',
+                'alpha_dash' => 'Имя папки может содержать только алфавитные символы, цифры, знаки подчёркивания (_) и дефисы (-)',
+            );
+
+            $validator = Validator::make($input, $rules, $messages);
+
+            if ($validator->passes()) {
+                $this->folder_rep->updateFolder($request->new_name_folder, $request->folderId);
+            }
+            else {
+                $messages = $validator->messages();
+                $data = array_add($data, 'errors', $messages);
+            }
+        }
+
+        return $data;
+    }
+
+
+
+
     public function addImage(Request $request)
     {
 
         $filesArray = [];
         $res = '';
+        $valid = '';
 
         for ($key = 0; $key < count($_FILES['uploads_new_images']['tmp_name']); $key++) {
 
@@ -157,6 +209,21 @@ class MainController extends Controller
 
         }
 
+
+        $validator = Validator::make(
+            array('file' => $request->file('uploads_new_images')),
+            array('file.*' => 'image|mimes:jpeg,png,gif|max:10')
+            );
+
+        if ($validator->passes()) {
+            $valid = 'Very good';
+        }
+        else {
+            $messages = $validator->messages();
+            $valid = $messages;
+        }
+
+
         foreach ($filesArray as $file) {
             if (copy($file['tmp_name'], storage_path() .'/'. $file['name'])) {
                 $res = 'Файл загружен на сервер';
@@ -167,7 +234,7 @@ class MainController extends Controller
         }
 
 
-        return response()->json(array('content' => $filesArray, 'res' => $res), 200);
+        return response()->json(array('content' => $filesArray, 'res' => $res, 'valid' => $valid), 200);
     }
 
 
